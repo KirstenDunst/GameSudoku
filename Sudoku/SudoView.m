@@ -25,8 +25,11 @@ typedef enum :NSInteger{
     UIView *bgView;
     BOOL isEdit;
 }
+//初始值保护数组
 @property (nonatomic , strong)NSMutableArray *initlizeIndexArr;
+//后退一步数组记录
 @property (nonatomic , strong)NSMutableArray *oldTitleArr;
+//显示数组
 @property (nonatomic , strong)NSMutableArray *dataArr;
 @end
 
@@ -67,7 +70,6 @@ typedef enum :NSInteger{
     bgView.layer.cornerRadius = 5;
     bgView.clipsToBounds = YES;
     [self addSubview:bgView];
-    
     for (int i = 0; i < 81; i++) {
         UIButton *myCreateButton = [UIButton buttonWithType:UIButtonTypeSystem];
         if (i%9>=3 && i%9 <6) {
@@ -94,7 +96,6 @@ typedef enum :NSInteger{
         [myCreateButton addTarget:self action:@selector(buttonChoose:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:myCreateButton];
     }
-    
 }
 //递归生成
 - (NSString *)titleWithIndex:(int)i{
@@ -124,6 +125,7 @@ typedef enum :NSInteger{
         NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
         [tempDic setValue:sender.currentTitle forKey:[NSString stringWithFormat:@"%ld",sender.tag-BTNTags]];
         [self.oldTitleArr addObject:tempDic];
+        //判断是否需要修改字段，是否是初始元素
         if (![self.initlizeIndexArr containsObject:[NSNumber numberWithInteger:sender.tag-BTNTags]]) {
             [sender setTitle:titleStr forState:UIControlStateNormal];
             [SudoModel isSatisfyWithDataArr:self.dataArr WithIndex:(int)(sender.tag-BTNTags) AndTitle:titleStr WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
@@ -174,7 +176,6 @@ typedef enum :NSInteger{
         }
         [self refresh];
         [self.oldTitleArr removeLastObject];
-        NSLog(@">>>>>>>>>>>>>>%@",self.oldTitleArr);
     }else if ([title isEqualToString:NEW]){
         [self getNewData];
         [self refresh];
