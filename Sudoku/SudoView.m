@@ -25,11 +25,18 @@ typedef enum :NSInteger{
     UIView *bgView;
     BOOL isEdit;
 }
+@property (nonatomic , strong)NSMutableArray *initlizeIndexArr;
 @property (nonatomic , strong)NSMutableArray *oldTitleArr;
 @property (nonatomic , strong)NSMutableArray *dataArr;
 @end
 
 @implementation SudoView
+- (NSMutableArray *)initlizeIndexArr{
+    if (!_initlizeIndexArr) {
+        _initlizeIndexArr = [NSMutableArray array];
+    }
+    return _initlizeIndexArr;
+}
 - (NSMutableArray *)oldTitleArr{
     if (!_oldTitleArr) {
         _oldTitleArr = [NSMutableArray array];
@@ -75,6 +82,7 @@ typedef enum :NSInteger{
         int a = arc4random()%5;
         NSString *title;
         if (a==1) {
+            [self.initlizeIndexArr addObject:[NSNumber numberWithInt:i]];
             title = [self titleWithIndex:i];
         }else{
             title = @"";
@@ -114,9 +122,9 @@ typedef enum :NSInteger{
     __weak typeof(self) weakself = self;
     if (isEdit) {
         NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
-        [tempDic setValue:sender.titleLabel.text forKey:[NSString stringWithFormat:@"%ld",sender.tag-BTNTags]];
+        [tempDic setValue:sender.currentTitle forKey:[NSString stringWithFormat:@"%ld",sender.tag-BTNTags]];
         [self.oldTitleArr addObject:tempDic];
-        if (!(sender.titleLabel.text.length>0)) {
+        if (![self.initlizeIndexArr containsObject:[NSNumber numberWithInteger:sender.tag-BTNTags]]) {
             [sender setTitle:titleStr forState:UIControlStateNormal];
             [SudoModel isSatisfyWithDataArr:self.dataArr WithIndex:(int)(sender.tag-BTNTags) AndTitle:titleStr WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -165,6 +173,8 @@ typedef enum :NSInteger{
             [self.dataArr replaceObjectAtIndex:index withObject:@""];
         }
         [self refresh];
+        [self.oldTitleArr removeLastObject];
+        NSLog(@">>>>>>>>>>>>>>%@",self.oldTitleArr);
     }else if ([title isEqualToString:NEW]){
         [self getNewData];
         [self refresh];
@@ -182,11 +192,13 @@ typedef enum :NSInteger{
     }
 }
 - (void)getNewData{
+    [self.initlizeIndexArr removeAllObjects];
     NSInteger count = self.dataArr.count;
     for (int i = 0; i<count; i++) {
         int a = arc4random()%5;
         NSString *title;
         if (a==1) {
+            [self.initlizeIndexArr addObject:[NSNumber numberWithInt:i]];
             title = [self titleWithIndex:i];
         }else{
             title = @"";
