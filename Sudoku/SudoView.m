@@ -9,6 +9,11 @@
 #import "SudoView.h"
 #import "SudoModel.h"
 
+
+#define BACKEDIT @"C" //后退一步 （这里只做后退一步操作，如果需要可以使用链表，数组记录,稍后有空会添加）
+#define NEW @"A" //重新开始
+
+
 typedef enum :NSInteger{
     BTNTags = 10,
 }Tags;
@@ -18,11 +23,19 @@ typedef enum :NSInteger{
     int cellWidth;
     NSString *titleStr;
     UIView *bgView;
+    BOOL isEdit;
 }
+@property (nonatomic , strong)NSMutableArray *oldTitleArr;
 @property (nonatomic , strong)NSMutableArray *dataArr;
 @end
 
 @implementation SudoView
+- (NSMutableArray *)oldTitleArr{
+    if (!_oldTitleArr) {
+        _oldTitleArr = [NSMutableArray array];
+    }
+    return _oldTitleArr;
+}
 - (NSMutableArray *)dataArr{
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
@@ -34,9 +47,9 @@ typedef enum :NSInteger{
 }
 - (instancetype)initWithFrame:(CGRect)frame{
     if ([super initWithFrame:frame]) {
+        isEdit = YES;
         cellWidth = (frame.size.width-20)/9;
         [self createViewWithFrame:frame];
-        
         [self createButtonViewWithFrame:frame];
     }
     return self;
@@ -64,7 +77,7 @@ typedef enum :NSInteger{
         if (a==1) {
             title = [self titleWithIndex:i];
         }else{
-           title = @"";
+            title = @"";
         }
         [self.dataArr replaceObjectAtIndex:i withObject:title];
         [myCreateButton setTitle:title forState:UIControlStateNormal];
@@ -98,19 +111,29 @@ typedef enum :NSInteger{
 }
 
 - (void)buttonChoose:(UIButton *)sender{
-    [sender setTitle:titleStr forState:UIControlStateNormal];
-    [SudoModel isSatisfyWithDataArr:self.dataArr WithIndex:(int)(sender.tag-BTNTags) AndTitle:titleStr WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!isSatisfy) {
-                for (int i = 0; i<errIndexArr.count; i++) {
-                    int ind = [errIndexArr[i] intValue];
-                    UIButton *btn = [bgView viewWithTag:ind+BTNTags];
-                    [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-                }
-                titleStr = @"";
-            }
-        });
-    }];
+    __weak typeof(self) weakself = self;
+    if (isEdit) {
+        NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
+        [tempDic setValue:sender.titleLabel.text forKey:[NSString stringWithFormat:@"%ld",sender.tag-BTNTags]];
+        [self.oldTitleArr addObject:tempDic];
+        if (!(sender.titleLabel.text.length>0)) {
+            [sender setTitle:titleStr forState:UIControlStateNormal];
+            [SudoModel isSatisfyWithDataArr:self.dataArr WithIndex:(int)(sender.tag-BTNTags) AndTitle:titleStr WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (!isSatisfy) {
+                        for (int i = 0; i<errIndexArr.count; i++) {
+                            int ind = [errIndexArr[i] intValue];
+                            UIButton *btn = [bgView viewWithTag:ind+BTNTags];
+                            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+                        }
+                        isEdit = NO;
+                    }else{
+                        [weakself.dataArr replaceObjectAtIndex:(int)(sender.tag-BTNTags) withObject:titleStr];
+                    }
+                });
+            }];
+        }
+    }
 }
 - (void)createButtonViewWithFrame:(CGRect)frame{
     int celWidth = (frame.size.width-20)/6;
@@ -119,9 +142,9 @@ typedef enum :NSInteger{
         myCreateButton.frame = CGRectMake(10+i%6*celWidth, frame.size.width+25+(i/6)*75,celWidth-5, 50);
         [myCreateButton setBackgroundColor:[UIColor grayColor]];
         if (i == 9) {
-            [myCreateButton setTitle:@"A" forState:UIControlStateNormal];
+            [myCreateButton setTitle:NEW forState:UIControlStateNormal];
         }else if (i == 10){
-            [myCreateButton setTitle:@"C" forState:UIControlStateNormal];
+            [myCreateButton setTitle:BACKEDIT forState:UIControlStateNormal];
         }else{
           [myCreateButton setTitle:[NSString stringWithFormat:@"%d",i+1] forState:UIControlStateNormal];
         }
@@ -130,11 +153,47 @@ typedef enum :NSInteger{
     }
 }
 - (void)titleChoose:(UIButton *)sender{
-    titleStr = sender.titleLabel.text;
+    NSString *title = sender.titleLabel.text;
+    if ([title isEqualToString:BACKEDIT]) {
+        isEdit = YES;
+        NSMutableDictionary *tempDic = [self.oldTitleArr lastObject];
+        int index = [[[tempDic allKeys] firstObject] intValue];
+        NSString *lastStr = [tempDic objectForKey:[[tempDic allKeys] firstObject]];
+        if (lastStr.length>0) {
+            [self.dataArr replaceObjectAtIndex:index withObject:lastStr];
+        }else{
+            [self.dataArr replaceObjectAtIndex:index withObject:@""];
+        }
+        [self refresh];
+    }else if ([title isEqualToString:NEW]){
+        [self getNewData];
+        [self refresh];
+    }else{
+        titleStr =title;
+    }
 }
 
-
-
+- (void)refresh{
+    for (int i = 0; i<self.dataArr.count; i++) {
+        UIButton *button = [bgView viewWithTag:BTNTags+i];
+        button.titleLabel.text = self.dataArr[i];
+        [button setTitle:self.dataArr[i] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    }
+}
+- (void)getNewData{
+    NSInteger count = self.dataArr.count;
+    for (int i = 0; i<count; i++) {
+        int a = arc4random()%5;
+        NSString *title;
+        if (a==1) {
+            title = [self titleWithIndex:i];
+        }else{
+            title = @"";
+        }
+        [self.dataArr replaceObjectAtIndex:i withObject:title];
+    }
+}
 
 
 

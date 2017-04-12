@@ -20,6 +20,9 @@
 }
 
 - (void)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title WithBlock:(void(^)(BOOL isSatisfy, NSArray *errIndexArr))block{
+    if (!(title.length>0)) {
+        return;
+    }
     NSMutableArray *tempArr = [NSMutableArray array];
     static BOOL isSatis;
     isSatis = YES;
