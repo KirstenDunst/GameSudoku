@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F5004391E9E2C29001BE18A /* ICAlarmView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F5004381E9E2C29001BE18A /* ICAlarmView.m */; };
 		1F5DB21F1E9CFDCE0016C06B /* SudoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DB21E1E9CFDCE0016C06B /* SudoModel.m */; };
 		1F5DB2221E9CFE760016C06B /* SudoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DB2211E9CFE760016C06B /* SudoView.m */; };
 		1F6B97E61E9CBE7400E4227D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B97E51E9CBE7400E4227D /* main.m */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F5004371E9E2C29001BE18A /* ICAlarmView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICAlarmView.h; sourceTree = "<group>"; };
+		1F5004381E9E2C29001BE18A /* ICAlarmView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICAlarmView.m; sourceTree = "<group>"; };
 		1F5DB21D1E9CFDCE0016C06B /* SudoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SudoModel.h; sourceTree = "<group>"; };
 		1F5DB21E1E9CFDCE0016C06B /* SudoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SudoModel.m; sourceTree = "<group>"; };
 		1F5DB2201E9CFE760016C06B /* SudoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SudoView.h; sourceTree = "<group>"; };
@@ -72,6 +75,8 @@
 				1F5DB2211E9CFE760016C06B /* SudoView.m */,
 				1F5DB21D1E9CFDCE0016C06B /* SudoModel.h */,
 				1F5DB21E1E9CFDCE0016C06B /* SudoModel.m */,
+				1F5004371E9E2C29001BE18A /* ICAlarmView.h */,
+				1F5004381E9E2C29001BE18A /* ICAlarmView.m */,
 				1F6B97ED1E9CBE7400E4227D /* Main.storyboard */,
 				1F6B97F01E9CBE7400E4227D /* Assets.xcassets */,
 				1F6B97F21E9CBE7400E4227D /* LaunchScreen.storyboard */,
@@ -161,6 +166,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5004391E9E2C29001BE18A /* ICAlarmView.m in Sources */,
 				1F6B97EC1E9CBE7400E4227D /* ViewController.m in Sources */,
 				1F5DB2221E9CFE760016C06B /* SudoView.m in Sources */,
 				1F6B97E91E9CBE7400E4227D /* AppDelegate.m in Sources */,

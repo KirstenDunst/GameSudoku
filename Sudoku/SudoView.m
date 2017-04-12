@@ -8,7 +8,7 @@
 
 #import "SudoView.h"
 #import "SudoModel.h"
-
+#import "ICAlarmView.h"
 
 #define BACKEDIT @"C" //后退一步 （这里只做后退一步操作，如果需要可以使用链表，数组记录,稍后有空会添加）
 #define NEW @"A" //重新开始
@@ -139,11 +139,19 @@ typedef enum :NSInteger{
                         isEdit = NO;
                     }else{
                         [weakself.dataArr replaceObjectAtIndex:(int)(sender.tag-BTNTags) withObject:titleStr];
+                        if (![weakself.dataArr containsObject:@""]) {
+                            [self performSelectorOnMainThread:@selector(Success) withObject:nil waitUntilDone:nil];
+                        }
                     }
                 });
             }];
         }
     }
+}
+- (void)Success{
+    ICAlarmView *alertView = [[ICAlarmView alloc]initWithAlarmWithTitle:@"Success" message:@"成功！！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil andButtonStateIsVertica:YES andIsContentTextfield:NO];
+    [alertView show];
+    
 }
 - (void)createButtonViewWithFrame:(CGRect)frame{
     int celWidth = (frame.size.width-20)/6;

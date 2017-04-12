@@ -46,6 +46,7 @@
         block(isSatis,tempArr);
     }
 }
+
 + (BOOL)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title{
     return [[self alloc]isSatisfyWithDataArr:dataArr WithIndex:index AndTitle:title];
 }
@@ -69,7 +70,6 @@
     }
     return tempArr;
 }
-
 
 //对应横向数组
 - (NSArray *)arrayWithHorizontalWithIndex:(int)index andDataArr:(NSMutableArray *)dataArr{
