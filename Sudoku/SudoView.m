@@ -195,7 +195,7 @@ typedef enum :NSInteger{
 - (void)refresh{
     for (int i = 0; i<self.dataArr.count; i++) {
         UIButton *button = [bgView viewWithTag:BTNTags+i];
-        button.titleLabel.text = self.dataArr[i];
+//        button.titleLabel.text = self.dataArr[i];
         [button setTitle:self.dataArr[i] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
