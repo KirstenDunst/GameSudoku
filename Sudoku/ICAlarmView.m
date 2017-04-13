@@ -67,7 +67,7 @@ typedef enum :NSInteger{
         mess_label.font = [UIFont systemFontOfSize:15];
         mess_label.text = message;
         mess_label.textColor = [UIColor grayColor];
-        mess_label.textAlignment = 1;
+        mess_label.textAlignment = NSTextAlignmentCenter;
         mess_label.numberOfLines = 0;
         CGSize size = [mess_label sizeThatFits:CGSizeMake(ALARM_WITH-2*CONTENT_DIS, 0)];
         mess_label.frame = CGRectMake(CONTENT_DIS, max_Content, size.width, size.height);
@@ -195,6 +195,7 @@ typedef enum :NSInteger{
     UIWindow *keyv=[[UIApplication sharedApplication] keyWindow];
     [keyv addSubview:self];
 }
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

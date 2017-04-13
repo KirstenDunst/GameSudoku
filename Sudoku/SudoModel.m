@@ -124,6 +124,7 @@
         [termArr addObject:til];
     }
     
+    //调换序列
     for (int i = 0; i<sudoArr.count; i++) {
         NSString *te_Str = [self changeTitleWithArr:termArr andTitle:sudoArr[i]];
         [sudoDataArr addObject:te_Str];
