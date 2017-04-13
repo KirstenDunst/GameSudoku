@@ -47,21 +47,6 @@
     }
 }
 
-//+ (BOOL)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title{
-//    return [[self alloc]isSatisfyWithDataArr:dataArr WithIndex:index AndTitle:title];
-//}
-- (BOOL)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title{
-    static BOOL isSatis;
-    NSArray *hoArr = [self arrayWithDataArr:dataArr AndIndexArr:[self arrayWithHorizontalWithIndex:index andDataArr:dataArr]];
-    NSArray *veArr = [self arrayWithDataArr:dataArr AndIndexArr:[self arrayWithVerticalWithIndex:index andDataArr:dataArr]];
-    NSArray *cellArr = [self arrayWithDataArr:dataArr AndIndexArr:[self arrayWithCellArrWithIndex:index andDataArr:dataArr]];
-    if ([hoArr containsObject:title]||[veArr containsObject:title]||[cellArr containsObject:title]) {
-        isSatis = NO;
-    }else{
-        isSatis = YES;
-    }
-    return isSatis;
-}
 - (NSArray *)arrayWithDataArr:(NSArray *)dataArr AndIndexArr:(NSArray *)indeArr{
     NSMutableArray *tempArr = [NSMutableArray array];
     for (NSNumber *index in indeArr) {
