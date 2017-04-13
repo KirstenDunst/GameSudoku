@@ -12,7 +12,7 @@
 
 #define BACKEDIT @"C" //后退一步 （这里只做后退一步操作，如果需要可以使用链表，数组记录,稍后有空会添加）
 #define NEW @"A" //重新开始
-#define SHOWINTERVAL 2 //显示的间隔量级
+#define SHOWINTERVAL 2 //显示的间隔量级，可表示难易程度，值越大越不能保证唯一性。
 
 typedef enum :NSInteger{
     BTNTags = 10,

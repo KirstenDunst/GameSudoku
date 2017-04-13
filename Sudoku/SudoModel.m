@@ -142,7 +142,7 @@
         return [self titleWithArrContent:dataArr];
     }
 }
-//能够生成362880个不同的随机矩阵
+//能够生成362880个不同的随机矩阵 (9的阶乘)
 - (NSString *)changeTitleWithArr:(NSMutableArray *)tempArr andTitle:(NSString *)tile{
     NSArray *t_Arr = [NSArray arrayWithArray:tempArr];
     static NSString *title;
