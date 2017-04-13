@@ -24,6 +24,8 @@
 - (void)createView{
     SudoView *sudoView = [[SudoView alloc]initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.width + 150)];
     [self.view addSubview:sudoView];
+    
+    
 }
 
 

@@ -11,13 +11,13 @@
 
 @implementation SudoModel
 
-+ (void)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title WithBlock:(void(^)(BOOL isSatisfy, NSArray *errIndexArr))block{
-    return [[self alloc]isSatisfyWithDataArr:dataArr WithIndex:index AndTitle:title WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
-        if (block) {
-            block(isSatisfy,errIndexArr);
-        }
-    }];
-}
+//+ (void)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title WithBlock:(void(^)(BOOL isSatisfy, NSArray *errIndexArr))block{
+//    return [[self alloc]isSatisfyWithDataArr:dataArr WithIndex:index AndTitle:title WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
+//        if (block) {
+//            block(isSatisfy,errIndexArr);
+//        }
+//    }];
+//}
 
 - (void)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title WithBlock:(void(^)(BOOL isSatisfy, NSArray *errIndexArr))block{
     if (!(title.length>0)) {
@@ -47,9 +47,9 @@
     }
 }
 
-+ (BOOL)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title{
-    return [[self alloc]isSatisfyWithDataArr:dataArr WithIndex:index AndTitle:title];
-}
+//+ (BOOL)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title{
+//    return [[self alloc]isSatisfyWithDataArr:dataArr WithIndex:index AndTitle:title];
+//}
 - (BOOL)isSatisfyWithDataArr:(NSMutableArray *)dataArr WithIndex:(int)index AndTitle:(NSString *)title{
     static BOOL isSatis;
     NSArray *hoArr = [self arrayWithDataArr:dataArr AndIndexArr:[self arrayWithHorizontalWithIndex:index andDataArr:dataArr]];
@@ -128,4 +128,49 @@
     return DTArr;
 }
 
+
+- (NSMutableArray *)generateRandomSudo{
+    NSMutableArray *sudoDataArr = [NSMutableArray array];
+    //母矩阵
+    NSArray *sudoArr = @[@"4",@"3",@"2",@"8",@"7",@"9",@"6",@"1",@"5",@"6",@"8",@"7",@"2",@"1",@"5",@"4",@"3",@"9",@"1",@"5",@"9",@"3",@"4",@"6",@"7",@"2",@"8",@"5",@"9",@"1",@"4",@"8",@"7",@"2",@"6",@"3",@"3",@"6",@"8",@"1",@"9",@"2",@"5",@"7",@"4",@"7",@"2",@"4",@"6",@"5",@"3",@"8",@"9",@"1",@"8",@"4",@"3",@"7",@"6",@"1",@"9",@"5",@"2",@"2",@"7",@"5",@"9",@"3",@"8",@"1",@"4",@"6",@"9",@"1",@"6",@"5",@"2",@"4",@"3",@"8",@"7"].copy;
+    NSMutableArray *termArr = [NSMutableArray array];
+    for (int i = 0; i<9; i++) {
+        NSString *til = [self titleWithArrContent:termArr];
+        [termArr addObject:til];
+    }
+    
+    for (int i = 0; i<sudoArr.count; i++) {
+        NSString *te_Str = [self changeTitleWithArr:termArr andTitle:sudoArr[i]];
+        [sudoDataArr addObject:te_Str];
+    }
+    return sudoDataArr;
+}
+
+//递归生成
+- (NSString *)titleWithArrContent:(NSMutableArray *)dataArr{
+    static NSString *title;
+    title = [NSString stringWithFormat:@"%d",arc4random()%9+1];
+    if (![dataArr containsObject:title]) {
+        return title;
+    }else{
+        return [self titleWithArrContent:dataArr];
+    }
+}
+//能够生成362880个不同的随机矩阵
+- (NSString *)changeTitleWithArr:(NSMutableArray *)tempArr andTitle:(NSString *)tile{
+    NSArray *t_Arr = [NSArray arrayWithArray:tempArr];
+    static NSString *title;
+    for (int i = 0; i<tempArr.count; i++) {
+        if ([tempArr[i] isEqualToString:tile]) {
+            if (i == tempArr.count-1) {
+                title = t_Arr[0];
+            }else{
+                title = t_Arr[i+1];
+            }
+        }else{
+            continue;
+        }
+    }
+    return title;
+}
 @end

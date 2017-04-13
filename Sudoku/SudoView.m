@@ -12,7 +12,7 @@
 
 #define BACKEDIT @"C" //后退一步 （这里只做后退一步操作，如果需要可以使用链表，数组记录,稍后有空会添加）
 #define NEW @"A" //重新开始
-
+#define SHOWINTERVAL 2 //显示的间隔量级
 
 typedef enum :NSInteger{
     BTNTags = 10,
@@ -24,6 +24,7 @@ typedef enum :NSInteger{
     NSString *titleStr;
     UIView *bgView;
     BOOL isEdit;
+    SudoModel *sudo_deal;
 }
 //初始值保护数组
 @property (nonatomic , strong)NSMutableArray *initlizeIndexArr;
@@ -31,9 +32,11 @@ typedef enum :NSInteger{
 @property (nonatomic , strong)NSMutableArray *oldTitleArr;
 //显示数组
 @property (nonatomic , strong)NSMutableArray *dataArr;
+
 @end
 
 @implementation SudoView
+
 - (NSMutableArray *)initlizeIndexArr{
     if (!_initlizeIndexArr) {
         _initlizeIndexArr = [NSMutableArray array];
@@ -49,14 +52,12 @@ typedef enum :NSInteger{
 - (NSMutableArray *)dataArr{
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
-        for (int i = 0; i<81; i++) {
-            [_dataArr addObject:@""];
-        }
     }
     return _dataArr;
 }
 - (instancetype)initWithFrame:(CGRect)frame{
     if ([super initWithFrame:frame]) {
+        sudo_deal = [[SudoModel alloc]init];
         isEdit = YES;
         cellWidth = (frame.size.width-20)/9;
         [self createViewWithFrame:frame];
@@ -81,32 +82,15 @@ typedef enum :NSInteger{
         }
         [myCreateButton setBackgroundColor:[UIColor lightGrayColor]];
         myCreateButton.titleLabel.layer.cornerRadius = 5;
-        int a = arc4random()%5;
-        NSString *title;
-        if (a==1) {
-            [self.initlizeIndexArr addObject:[NSNumber numberWithInt:i]];
-            title = [self titleWithIndex:i];
-        }else{
-            title = @"";
-        }
-        [self.dataArr replaceObjectAtIndex:i withObject:title];
-        [myCreateButton setTitle:title forState:UIControlStateNormal];
         myCreateButton.tag = BTNTags+i;
         myCreateButton.titleLabel.clipsToBounds = YES;
         [myCreateButton addTarget:self action:@selector(buttonChoose:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:myCreateButton];
     }
+    [self getNewData];
+    [self refresh];
 }
-//递归生成
-- (NSString *)titleWithIndex:(int)i{
-    static NSString *title;
-    title = [NSString stringWithFormat:@"%d",arc4random()%9+1];
-    if ([SudoModel isSatisfyWithDataArr:self.dataArr WithIndex:i AndTitle:title]) {
-        return title;
-    }else{
-       return [self titleWithIndex:i];
-    }
-}
+
 - (UIButton *)createWithBegain:(int)index andIndex:(int)i{
     UIButton *myCreateButton = [[UIButton alloc]init];
     if (i/9 >= 3 && i/9 <6) {
@@ -128,7 +112,7 @@ typedef enum :NSInteger{
         //判断是否需要修改字段，是否是初始元素
         if (![self.initlizeIndexArr containsObject:[NSNumber numberWithInteger:sender.tag-BTNTags]]) {
             [sender setTitle:titleStr forState:UIControlStateNormal];
-            [SudoModel isSatisfyWithDataArr:self.dataArr WithIndex:(int)(sender.tag-BTNTags) AndTitle:titleStr WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
+            [sudo_deal isSatisfyWithDataArr:self.dataArr WithIndex:(int)(sender.tag-BTNTags) AndTitle:titleStr WithBlock:^(BOOL isSatisfy, NSArray *errIndexArr) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (!isSatisfy) {
                         for (int i = 0; i<errIndexArr.count; i++) {
@@ -202,17 +186,16 @@ typedef enum :NSInteger{
 }
 - (void)getNewData{
     [self.initlizeIndexArr removeAllObjects];
+    self.dataArr = [sudo_deal generateRandomSudo];
+    NSLog(@">>>>>>>>>>%@",self.dataArr);
     NSInteger count = self.dataArr.count;
     for (int i = 0; i<count; i++) {
-        int a = arc4random()%5;
-        NSString *title;
+        int a = arc4random()%SHOWINTERVAL;
         if (a==1) {
             [self.initlizeIndexArr addObject:[NSNumber numberWithInt:i]];
-            title = [self titleWithIndex:i];
         }else{
-            title = @"";
+            [self.dataArr replaceObjectAtIndex:i withObject:@""];
         }
-        [self.dataArr replaceObjectAtIndex:i withObject:title];
     }
 }
 
