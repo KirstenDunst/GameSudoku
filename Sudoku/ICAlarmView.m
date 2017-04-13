@@ -69,8 +69,8 @@ typedef enum :NSInteger{
         mess_label.textColor = [UIColor grayColor];
         mess_label.textAlignment = NSTextAlignmentCenter;
         mess_label.numberOfLines = 0;
-        CGSize size = [mess_label sizeThatFits:CGSizeMake(ALARM_WITH-2*CONTENT_DIS, 0)];
-        mess_label.frame = CGRectMake(CONTENT_DIS, max_Content, size.width, size.height);
+        CGSize sizeMes = [mess_label sizeThatFits:CGSizeMake(ALARM_WITH-2*CONTENT_DIS, 0)];
+        mess_label.frame = CGRectMake(CONTENT_DIS, max_Content, ALARM_WITH-2*CONTENT_DIS, sizeMes.height);
         [bgView addSubview:mess_label];
         max_Content = CGRectGetMaxY(mess_label.frame)+10;
     }else{
