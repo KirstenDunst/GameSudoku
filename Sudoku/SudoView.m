@@ -81,9 +81,9 @@ typedef enum :NSInteger{
             myCreateButton = [self createWithBegain:5 andIndex:i];
         }
         [myCreateButton setBackgroundColor:[UIColor lightGrayColor]];
-        myCreateButton.titleLabel.layer.cornerRadius = 5;
+        myCreateButton.layer.cornerRadius = 5;
         myCreateButton.tag = BTNTags+i;
-        myCreateButton.titleLabel.clipsToBounds = YES;
+        myCreateButton.clipsToBounds = YES;
         [myCreateButton addTarget:self action:@selector(buttonChoose:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:myCreateButton];
     }
@@ -150,6 +150,7 @@ typedef enum :NSInteger{
         }else{
           [myCreateButton setTitle:[NSString stringWithFormat:@"%d",i+1] forState:UIControlStateNormal];
         }
+        [myCreateButton setTintColor:[UIColor cyanColor]];
         [myCreateButton addTarget:self action:@selector(titleChoose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:myCreateButton];
     }
